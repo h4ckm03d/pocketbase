@@ -9,9 +9,8 @@ func (dao *Dao) HasTable(tableName string) bool {
 	var exists bool
 
 	err := dao.DB().Select("count(*)").
-		From("sqlite_schema").
-		AndWhere(dbx.HashExp{"type": "table"}).
-		AndWhere(dbx.NewExp("LOWER([[name]])=LOWER({:tableName})", dbx.Params{"tableName": tableName})).
+		From("information_schema.tables").
+		AndWhere(dbx.NewExp("LOWER([[table_name]])=LOWER({:tableName})", dbx.Params{"tableName": tableName})).
 		Limit(1).
 		Row(&exists)
 
@@ -22,7 +21,7 @@ func (dao *Dao) HasTable(tableName string) bool {
 func (dao *Dao) GetTableColumns(tableName string) ([]string, error) {
 	columns := []string{}
 
-	err := dao.DB().NewQuery("SELECT name FROM PRAGMA_TABLE_INFO({:tableName})").
+	err := dao.DB().NewQuery("SELECT column_name FROM information_schema.columns WHERE table_name = '{:tableName}'").
 		Bind(dbx.Params{"tableName": tableName}).
 		Column(&columns)
 

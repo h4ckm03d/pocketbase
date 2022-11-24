@@ -101,7 +101,7 @@ func migrationsConnectionsMap(app core.App) map[string]migrationsConnection {
 			MigrationsList: migrations.AppMigrations,
 		},
 		"logs": {
-			DB:             app.LogsDB(),
+			DB:             app.DB(),
 			MigrationsList: logs.LogsMigrations,
 		},
 	}

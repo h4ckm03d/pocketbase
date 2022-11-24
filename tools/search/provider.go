@@ -46,6 +46,7 @@ type Provider struct {
 // NewProvider creates and returns a new search provider.
 //
 // Example:
+//
 //	baseQuery := db.Select("*").From("user")
 //	fieldResolver := search.NewSimpleFieldResolver("id", "name")
 //	models := []*YourDataStruct{}
@@ -180,6 +181,17 @@ func (s *Provider) Exec(items any) (*Result, error) {
 		}
 	}
 
+	// count
+	var totalCount int64
+	countQuery := modelsQuery
+	countQuery.Distinct(false).Select("COUNT(*)")
+	if s.countColumn != "" {
+		countQuery.Select("COUNT(DISTINCT(" + s.countColumn + "))")
+	}
+	if err := countQuery.Row(&totalCount); err != nil {
+		return nil, err
+	}
+
 	// apply sorting
 	for _, sortField := range s.sort {
 		expr, err := sortField.BuildExpr(s.fieldResolver)
@@ -193,17 +205,6 @@ func (s *Provider) Exec(items any) (*Result, error) {
 
 	// apply field resolver query modifications (if any)
 	if err := s.fieldResolver.UpdateQuery(&modelsQuery); err != nil {
-		return nil, err
-	}
-
-	// count
-	var totalCount int64
-	countQuery := modelsQuery
-	countQuery.Distinct(false).Select("COUNT(*)")
-	if s.countColumn != "" {
-		countQuery.Select("COUNT(DISTINCT(" + s.countColumn + "))")
-	}
-	if err := countQuery.Row(&totalCount); err != nil {
 		return nil, err
 	}
 

@@ -76,6 +76,7 @@ func (dao *Dao) FindRecordsByIds(
 // If no records are found, returns an empty slice.
 //
 // Example:
+//
 //	expr := dbx.HashExp{"email": "test@example.com"}
 //	dao.FindRecordsByExpr(collection, expr)
 func (dao *Dao) FindRecordsByExpr(collection *models.Collection, expr dbx.Expression) ([]*models.Record, error) {
@@ -280,8 +281,8 @@ func (dao *Dao) SyncRecordTableSchema(newCollection *models.Collection, oldColle
 	if oldCollection == nil {
 		cols := map[string]string{
 			schema.ReservedFieldNameId:      "TEXT PRIMARY KEY",
-			schema.ReservedFieldNameCreated: `TEXT DEFAULT "" NOT NULL`,
-			schema.ReservedFieldNameUpdated: `TEXT DEFAULT "" NOT NULL`,
+			schema.ReservedFieldNameCreated: `TEXT DEFAULT '' NOT NULL`,
+			schema.ReservedFieldNameUpdated: `TEXT DEFAULT '' NOT NULL`,
 		}
 
 		tableName := newCollection.Name
