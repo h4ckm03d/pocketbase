@@ -10,6 +10,8 @@
     <a href="https://pkg.go.dev/github.com/pocketbase/pocketbase" target="_blank" rel="noopener"><img src="https://godoc.org/github.com/ganigeorgiev/fexpr?status.svg" alt="Go package documentation" /></a>
 </p>
 
+# WARNING: This fork is experimental using postgresql for pocketbase and never get update from upstream sources
+
 [PocketBase](https://pocketbase.io) is an open source Go backend, consisting of:
 
 - embedded database (_SQLite_) with **realtime subscriptions**
